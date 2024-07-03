@@ -1,0 +1,6 @@
+flask
+deepface
+opencv-python
+tensorflow==2.5.0  # if you decide to downgrade, else use the latest compatible version
+tf-keras
+waitress
