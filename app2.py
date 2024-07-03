@@ -17,42 +17,43 @@ employee_images = {
     # Add more mappings as needed
 }
 
-def verify(img1_path, img2_path):
+def verify(employee_number):
+    img1_path = employee_images.get(employee_number)
+    if img1_path is None:
+        raise ValueError(f"No image found for employee number {employee_number}")
     img1 = cv2.imread(img1_path)
-    img2 = cv2.imread(img2_path)
+    img2 = cv2.imread(live_image_path)
     if img1 is None:
         raise ValueError(f"Image at path {img1_path} could not be loaded")
     if img2 is None:
-        raise ValueError(f"Image at path {img2_path} could not be loaded")
+        raise ValueError(f"Image at path {live_image_path} could not be loaded")
     try:
-        result = DeepFace.verify(img1_path, img2_path, model_name='Facenet')
+        result = DeepFace.verify(img1_path, live_image_path, model_name='Facenet')
         verification = result['verified']
         return verification, result
     except Exception as e:
-        raise ValueError(f"Exception while processing {img2_path}: {str(e)}")
+        raise ValueError(f"Exception while processing {live_image_path}: {str(e)}")
 
 @app.route("/verify", methods=['POST'])
 def verify_image():
-    if 'employee_number' not in request.form or 'live_image' not in request.files:
-        return jsonify({'error': 'Please provide an employee number and a live_image file.'}), 400
+    if 'PSNo' not in request.form:
+        return jsonify({'error': 'Please provide PSNo.'}), 400
 
-    employee_number = request.form['employee_number']
-    live_image = request.files['live_image']
+    PSNo = request.form['PSNo']
 
-    if employee_number not in employee_images:
-        return jsonify({'error': 'Invalid employee number or images not found.'}), 400
+    if PSNo not in employee_images:
+        return jsonify({'error': 'Invalid PSNo or images not found.'}), 400
 
-    # Retrieve the pre-stored image path
-    image1_path = employee_images[employee_number]
-
-    # Save the live-captured image
-    timestamp = datetime.datetime.now().strftime("%H%M%S")
-    live_image_filename = f"_{employee_number}_{timestamp}.png"
-    image2_path = os.path.join('uploads', live_image_filename)
-    live_image.save(image2_path)
+        #live_image_path = os.path.join('uploads', live_image_filename)
+    # Handle live image
+    live_image = request.files.get('live_image')
+    if live_image:
+        #calling live_image with proper parameters 
+    else:
+        return jsonify({'error': 'No live image provided.'}), 400
 
     try:
-        verification, result = verify(image1_path, image2_path)
+        verification, result = verify(PSNo)
         return jsonify({'verified': verification, 'result': result}), 200
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
