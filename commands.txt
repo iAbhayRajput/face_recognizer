@@ -1,0 +1,7 @@
+#commands for setting up flask and iis 
+
+//to install all dependencies of python 
+
+pip install -r requirements.txt
+
+
