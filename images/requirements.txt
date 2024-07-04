@@ -1,0 +1,10 @@
+#commands for setting up flask and iis 
+
+//to install all dependencies of python 
+
+pip install -r requirements.txt
+
+//postman api calls 
+ post mehthod
+url: http://127.0.0.1:5000/verify
+add 2 images with file type field
