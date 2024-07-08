@@ -8,5 +8,8 @@ pip install -r requirements.txt
 
 https://drive.google.com/file/d/12bdjYMHPS9luoF7t_WE8Aid1INAkjvqU/view?usp=sharing
 
-//link for open or public server 
+//link for open or public server (5 images)
 https://face-recognizer-9juj.onrender.com/verify
+
+//link for open or public sever (2 images)
+https://face-recognizer-1.onrender.com
